@@ -1,0 +1,24 @@
+name: MagicStuff
+version: 1.0
+main: de.cric_hammel.magicStuff.Main
+api-version: 1.18
+
+commands:
+   giveteleporter:
+      description: Lets you teleport around the world!
+   givescaffolder:
+      description: Lets you scaffold!
+   giveautomlg:
+      description: Keep this in your inventory to survive any jump!
+   givewolfsword:
+      description: Collect souls to create your army of wolves!
+   givemagicalblazepowder:
+      description: Keep this in your inventory to gain immunity to fire!
+   givepickarang:
+      description: Lets you break blocks from a distance!
+   givewop:
+      description: Right-click an entity to possess it!
+   magicstuff:
+      description: The main command for the MagicStuff-Plugin
+   giveautofeeder:
+      description: Put items in it to be feeded automatically!
