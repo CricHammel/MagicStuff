@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
@@ -43,6 +44,7 @@ import de.cric_hammel.magicStuff.listeners.AutoFeederListener;
 import de.cric_hammel.magicStuff.listeners.AutoMLGListener;
 import de.cric_hammel.magicStuff.listeners.MagicalBlazePowderListener;
 import de.cric_hammel.magicStuff.listeners.PickarangListener;
+import de.cric_hammel.magicStuff.listeners.PlayerJoinListener;
 import de.cric_hammel.magicStuff.listeners.ScaffolderListener;
 import de.cric_hammel.magicStuff.listeners.TeleporterListener;
 import de.cric_hammel.magicStuff.listeners.WOPListener;
@@ -54,6 +56,8 @@ public class Main extends JavaPlugin {
 
 	private File afConfigFile;
 	private FileConfiguration afConfig;
+	
+	public static final List<NamespacedKey> recipes = new ArrayList<>();
 
 	public static final String SCAFFOLDER_LORE = "Lets you scaffold!";
 
@@ -111,6 +115,7 @@ public class Main extends JavaPlugin {
 
 		// Events
 		PluginManager p = Bukkit.getPluginManager();
+		p.registerEvents(new PlayerJoinListener(), plugin);
 		p.registerEvents(new ScaffolderListener(), plugin);
 		p.registerEvents(new TeleporterListener(), plugin);
 		p.registerEvents(new AutoMLGListener(), plugin);
@@ -123,6 +128,7 @@ public class Main extends JavaPlugin {
 		// Scaffolder
 		ItemStack scaffolder = createScaffolderItem();
 		NamespacedKey keyS = new NamespacedKey(getPlugin(), "scaffolder");
+		recipes.add(keyS);
 		ShapedRecipe rS = new ShapedRecipe(keyS, scaffolder);
 		rS.shape("sss", "sns", "sss");
 		rS.setIngredient('s', Material.SCAFFOLDING);
@@ -132,6 +138,7 @@ public class Main extends JavaPlugin {
 		// Teleporter
 		ItemStack teleporter = createTeleporterItem();
 		NamespacedKey keyT = new NamespacedKey(getPlugin(), "teleporter");
+		recipes.add(keyT);
 		ShapedRecipe rT = new ShapedRecipe(keyT, teleporter);
 		rT.shape("ded", "ene", "ded");
 		rT.setIngredient('d', Material.DIAMOND_BLOCK);
@@ -142,6 +149,7 @@ public class Main extends JavaPlugin {
 		// Auto-MLG
 		ItemStack bucket = createAutoMLGItem();
 		NamespacedKey keyB = new NamespacedKey(plugin, "auto-mlg");
+		recipes.add(keyB);
 		ShapedRecipe rB = new ShapedRecipe(keyB, bucket);
 		rB.shape("idi", "ibi", "iei");
 		rB.setIngredient('i', Material.IRON_BLOCK);
@@ -153,6 +161,7 @@ public class Main extends JavaPlugin {
 		// Wolf-Sword
 		ItemStack sword = createWolfSwordItem();
 		NamespacedKey keyW = new NamespacedKey(plugin, "wolf-sword");
+		recipes.add(keyW);
 		ShapedRecipe rW = new ShapedRecipe(keyW, sword);
 		rW.shape("sgs", "sgs", "sts");
 		rW.setIngredient('s', Material.SOUL_SAND);
@@ -163,6 +172,7 @@ public class Main extends JavaPlugin {
 		// Magical-Blaze-Powder
 		ItemStack powder = createMagicalBlazePowderItem();
 		NamespacedKey keyP = new NamespacedKey(plugin, "magical-blaze-powder");
+		recipes.add(keyP);
 		ShapedRecipe rP = new ShapedRecipe(keyP, powder);
 		rP.shape("bbb", "chc", "mmm");
 		rP.setIngredient('b', Material.BLAZE_ROD);
@@ -174,6 +184,7 @@ public class Main extends JavaPlugin {
 		// Pickarang
 		ItemStack pick = createPickarangItem();
 		NamespacedKey keyPi = new NamespacedKey(plugin, "pickarang");
+		recipes.add(keyPi);
 		ShapelessRecipe rPi = new ShapelessRecipe(keyPi, pick);
 		rPi.addIngredient(1, Material.NETHERITE_PICKAXE);
 		rPi.addIngredient(1, Material.TRIDENT);
@@ -182,6 +193,7 @@ public class Main extends JavaPlugin {
 		// WOP
 		ItemStack wop = createWOPItem();
 		NamespacedKey keyWOP = new NamespacedKey(plugin, "wand-of-possessing");
+		recipes.add(keyWOP);
 		ShapedRecipe rWOP = new ShapedRecipe(keyWOP, wop);
 		rWOP.shape("eee", "dbd", "nnn");
 		rWOP.setIngredient('b', Material.BLAZE_ROD);
@@ -193,6 +205,7 @@ public class Main extends JavaPlugin {
 		// Auto-feeder
 		ItemStack af = createAutoFeederItem();
 		NamespacedKey keyAf = new NamespacedKey(plugin, "auto-feeder");
+		recipes.add(keyAf);
 		ShapedRecipe rAf = new ShapedRecipe(keyAf, af);
 		rAf.shape("ccc", "cdc", "ccc");
 		rAf.setIngredient('c', Material.CAKE);
