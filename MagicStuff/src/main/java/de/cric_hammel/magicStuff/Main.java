@@ -50,6 +50,12 @@ import de.cric_hammel.magicStuff.listeners.TeleporterListener;
 import de.cric_hammel.magicStuff.listeners.WOPListener;
 import de.cric_hammel.magicStuff.listeners.WolfSwordListener;
 
+
+/**
+ * @author Cric_Hammel
+ * 
+ * Some stuff with magic
+ */
 public class Main extends JavaPlugin {
 
 	private static Main plugin;
