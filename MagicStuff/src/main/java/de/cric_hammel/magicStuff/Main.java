@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -49,6 +50,7 @@ import de.cric_hammel.magicStuff.listeners.ScaffolderListener;
 import de.cric_hammel.magicStuff.listeners.TeleporterListener;
 import de.cric_hammel.magicStuff.listeners.WOPListener;
 import de.cric_hammel.magicStuff.listeners.WolfSwordListener;
+import de.cric_hammel.magicStuff.utilities.UpdateChecker;
 
 
 /**
@@ -57,6 +59,8 @@ import de.cric_hammel.magicStuff.listeners.WolfSwordListener;
  * Some stuff with magic
  */
 public class Main extends JavaPlugin {
+
+	private static final int RESOURCE_ID = 102735;
 
 	private static Main plugin;
 
@@ -107,6 +111,15 @@ public class Main extends JavaPlugin {
 			}
 		}
 
+		new UpdateChecker(this, RESOURCE_ID).getVersion(version -> {
+            if (this.getDescription().getVersion().equals(version)) {
+                getLogger().log(Level.INFO, "Everything is up to date.");
+            } else {
+                getLogger().log(Level.INFO, "There is a new update available! Please dowload it from https://www.spigotmc.org/resources/magicstuff.102735/");
+            }
+        });
+		
+		
 		// Commands
 		getCommand("givescaffolder").setExecutor(new GiveScaffolderCommand());
 		getCommand("giveteleporter").setExecutor(new GiveTeleporterCommand());
