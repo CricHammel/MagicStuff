@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommandYamlParser;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
@@ -17,39 +18,38 @@ public class MagicStuffCommand implements TabExecutor {
 	public boolean onCommand(CommandSender sender, Command c, String label, String[] args) {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
-			if (player.hasPermission("magicStuff.magicstuff")) {
-				if (args.length == 0) {
-					player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-							"&d-----<&5MagicStuff&dv&5" + Main.getPlugin().getDescription().getVersion() + "&d>-----"));
-					player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-							"&dUse &5/magicstuff help &dto see all available commands!"));
-				} else if (args.length == 1) {
-					if (args[0].equalsIgnoreCase("reload")) {
-						Main.getPlugin().reloadConfig();
-						player.sendMessage(Main.getMessageFromConfig("messages.config-reload", c.getName()));
-					} else if (args[0].equalsIgnoreCase("reset")) {
-						File configFile = new File(Main.getPlugin().getDataFolder(), "config.yml");
-						configFile.delete();
-						Main.getPlugin().saveDefaultConfig();
-						Main.getPlugin().reloadConfig();
-						player.sendMessage(Main.getMessageFromConfig("messages.config-reset", c.getName()));
-					} else if (args[0].equalsIgnoreCase("help")) {
-						player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&dAvailable options&c:"));
-						player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-								"&5/magicstuff help&c: &5 Shows this message"));
-						player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-								"&5/magicstuff reload&c: &5 Reloads the config from the config file"));
-						player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-								"&5/magicstuff reset&c: &5 Reset the config overwriting it with a default one"));
+			if (args.length == 0) {
+				colorMessage(player, "&d-----<&5MagicStuff&dv&5" + Main.getPlugin().getDescription().getVersion() + "&d>-----");
+				colorMessage(player, "&dUse &5/magicstuff help &dto see all available commands and items!");
+			} else if (args.length == 1) {
+				if (args[0].equalsIgnoreCase("reload")) {
+					Main.getPlugin().reloadConfig();
+					colorMessage(player, Main.getMessageFromConfig("messages.config-reload"));
+				} else if (args[0].equalsIgnoreCase("reset")) {
+					File configFile = new File(Main.getPlugin().getDataFolder(), "config.yml");
+					configFile.delete();
+					Main.getPlugin().saveDefaultConfig();
+					Main.getPlugin().reloadConfig();
+					colorMessage(player, Main.getMessageFromConfig("messages.config-reset"));
+				} else if (args[0].equalsIgnoreCase("help")) {
+					colorMessage(player, "&dAvailable commands&c:");
+					colorMessage(player, "&5/magicstuff help items&c: &5Shows a list of all items with a short description");
+					colorMessage(player, "&5/magicstuff help commands&c: &5Shows this message");
+					colorMessage(player, "&5/magicstuff reload&c: &5Reloads the config from the config file");
+					colorMessage(player, "&5/magicstuff reset&c: &5Reset the config overwriting it with a default one");
+					
+					colorMessage(player, "&dAvailable items with their /give-commands&c:");
+					for (Command command : PluginCommandYamlParser.parse(Main.getPlugin())) {
+						if (!command.getName().equals("magicstuff")) {
+							colorMessage(player, "&5/" + command.getName() + "&c: &5" + command.getDescription());
+						}
 					}
-				} else
-					player.sendMessage(Main.getMessageFromConfig("messages.wrong-arguments",
-							c.getName() + " <help|reload|reset>"));
+				}
 			} else
-				player.sendMessage(Main.getMessageFromConfig("messages.no-permission", c.getName()));
+				return false;
 		} else
-			sender.sendMessage(Main.getMessageFromConfig("messages.not-sent-by-player", c.getName()));
-		return false;
+			sender.sendMessage(Main.getMessageFromConfig("messages.not-sent-by-player"));
+		return true;
 	}
 
 	@Override
@@ -62,5 +62,10 @@ public class MagicStuffCommand implements TabExecutor {
 			completions.add("reset");
 		}
 		return completions;
+	}
+	
+	
+	public void colorMessage(Player p, String message) {
+		p.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
 	}
 }

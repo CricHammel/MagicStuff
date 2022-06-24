@@ -1,15 +1,15 @@
 messages:
    # Gets sent when the command isn't executed by a player
-   not-sent-by-player: "&cThis command can only be used by a player!"
+   not-sent-by-player: "&cThis command can only be used by a player"
    
    # Gets sent when a player doesn't have the permission do send a command
-   no-permission: "&cYou don't have the permission to do that!"
+   no-permission: "&cYou don't have the permission to do that"
    
    # Gets sent when a player uses the wrong arguments for a command
-   wrong-arguments: "&cWrong arguments! Use &6%command%&c!"
+   wrong-arguments: "&cWrong arguments! Use &6/<command>"
    
    # Gets sent when the config is reloaded
-   config-reload: "&aThe config has been reloaded!"
+   config-reload: "&aThe config has been reloaded"
    
    #Gets sent when the config is reset
-   config-reset: "&aThe config has been reset!"
+   config-reset: "&aThe config has been reset"
