@@ -14,6 +14,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
+import org.bukkit.command.Command;
+import org.bukkit.command.PluginCommandYamlParser;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -52,12 +54,12 @@ import de.cric_hammel.magicStuff.listeners.WOPListener;
 import de.cric_hammel.magicStuff.listeners.WolfSwordListener;
 import de.cric_hammel.magicStuff.utilities.UpdateChecker;
 
-
 /**
  * @author Cric_Hammel
  * 
- * Some stuff with magic
+ *         Some stuff with magic
  */
+
 public class Main extends JavaPlugin {
 
 	private static final int RESOURCE_ID = 102735;
@@ -66,7 +68,7 @@ public class Main extends JavaPlugin {
 
 	private File afConfigFile;
 	private FileConfiguration afConfig;
-	
+
 	public static final List<NamespacedKey> recipes = new ArrayList<>();
 
 	public static final String SCAFFOLDER_LORE = "Lets you scaffold!";
@@ -111,15 +113,16 @@ public class Main extends JavaPlugin {
 			}
 		}
 
-		new UpdateChecker(this, RESOURCE_ID).getVersion(version -> {
-            if (this.getDescription().getVersion().equals(version)) {
-                getLogger().log(Level.INFO, "Everything is up to date.");
-            } else {
-                getLogger().log(Level.INFO, "There is a new update available! Please dowload it from https://www.spigotmc.org/resources/magicstuff.102735/");
-            }
-        });
-		
-		
+		String localVersion = this.getDescription().getVersion();
+		String remoteVersion = new UpdateChecker(this, RESOURCE_ID).getVersion();
+
+		if (localVersion.equals(remoteVersion)) {
+			getLogger().log(Level.INFO, "Everything is up to date.");
+		} else {
+			getLogger().log(Level.INFO,
+					"There is a new update available! Please dowload it from https://www.spigotmc.org/resources/magicstuff.102735/");
+		}
+
 		// Commands
 		getCommand("givescaffolder").setExecutor(new GiveScaffolderCommand());
 		getCommand("giveteleporter").setExecutor(new GiveTeleporterCommand());
@@ -131,6 +134,15 @@ public class Main extends JavaPlugin {
 		getCommand("magicstuff").setExecutor(new MagicStuffCommand());
 		getCommand("magicstuff").setTabCompleter(new MagicStuffCommand());
 		getCommand("giveautofeeder").setExecutor(new GiveAutoFeederCommand());
+
+		for (Command c : PluginCommandYamlParser.parse(plugin)) {
+			if (c.getName().equals("magicstuff")) {
+				c.setUsage(getConfig().getString("messages.wrong-arguments") + " [help [items|commands]|reload|reset]")
+						.setPermissionMessage(getConfig().getString("messages.no-permission"));
+			} else
+				c.setUsage(getConfig().getString("messages.wrong-arguments"))
+						.setPermissionMessage(getConfig().getString("messages.no-permission"));
+		}
 
 		// Events
 		PluginManager p = Bukkit.getPluginManager();
@@ -263,9 +275,8 @@ public class Main extends JavaPlugin {
 		return afInventories;
 	}
 
-	public static String getMessageFromConfig(String path, String command) {
-		return ChatColor.translateAlternateColorCodes('&',
-				plugin.getConfig().getString(path).replace("%command%", "/" + command));
+	public static String getMessageFromConfig(String path) {
+		return ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString(path));
 	}
 
 	public static ItemStack createScaffolderItem() {
