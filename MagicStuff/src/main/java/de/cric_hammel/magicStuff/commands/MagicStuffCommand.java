@@ -33,15 +33,15 @@ public class MagicStuffCommand implements TabExecutor {
 					colorMessage(player, Main.getMessageFromConfig("messages.config-reset"));
 				} else if (args[0].equalsIgnoreCase("help")) {
 					colorMessage(player, "&dAvailable commands&c:");
-					colorMessage(player, "&5/magicstuff help items&c: &5Shows a list of all items with a short description");
-					colorMessage(player, "&5/magicstuff help commands&c: &5Shows this message");
-					colorMessage(player, "&5/magicstuff reload&c: &5Reloads the config from the config file");
-					colorMessage(player, "&5/magicstuff reset&c: &5Reset the config overwriting it with a default one");
-					
+					colorMessage(player, "&5/magicstuff help items&c: &9Shows a list of all items with a short description");
+					colorMessage(player, "&5/magicstuff help commands&c: &9Shows this message");
+					colorMessage(player, "&5/magicstuff reload&c: &9Reloads the config from the config file");
+					colorMessage(player, "&5/magicstuff reset&c: &9Reset the config overwriting it with a default one");
+					colorMessage(player, "");
 					colorMessage(player, "&dAvailable items with their /give-commands&c:");
 					for (Command command : PluginCommandYamlParser.parse(Main.getPlugin())) {
 						if (!command.getName().equals("magicstuff")) {
-							colorMessage(player, "&5/" + command.getName() + "&c: &5" + command.getDescription());
+							colorMessage(player, "&5/" + command.getName() + "&c: &9" + command.getDescription());
 						}
 					}
 				}
