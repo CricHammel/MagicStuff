@@ -6,7 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.BlockData;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,7 +19,7 @@ import de.cric_hammel.magicStuff.Main;
 
 public class ScaffolderListener implements Listener {
 
-	private static final String METADATA_KEY_PREVIOUS = "magicStuff_scaffolder";
+	private static final String METADATA_KEY = "magicStuff_scaffolder";
 	private static final String METADATA_COLOR_KEY = "magicStuff_scaffolder_color";
 
 	@EventHandler
@@ -55,42 +55,25 @@ public class ScaffolderListener implements Listener {
 				underPlayer = to.getBlock().getRelative(BlockFace.DOWN);
 			}
 
-			Material previousType = underPlayer.getType();
-			if (!underPlayer.hasMetadata(METADATA_KEY_PREVIOUS)) {
-				underPlayer.setMetadata(METADATA_KEY_PREVIOUS, new FixedMetadataValue(Main.getPlugin(),
-						new SavedBlock(previousType, underPlayer.getBlockData())));
+//			Material previousType = underPlayer.getType();
+			final BlockState state;
+			if (!underPlayer.hasMetadata(METADATA_KEY)) {
+				state = underPlayer.getState();
+				underPlayer.setMetadata(METADATA_KEY, new FixedMetadataValue(Main.getPlugin(), state));
+			} else {
+				state = (BlockState) underPlayer.getMetadata(METADATA_KEY).get(0).value();
 			}
 
 			underPlayer.setType(colorType);
 			new BukkitRunnable() {
 				@Override
 				public void run() {
-					if (underPlayer.hasMetadata(METADATA_KEY_PREVIOUS)) {
-						SavedBlock s = (SavedBlock) underPlayer.getMetadata(METADATA_KEY_PREVIOUS).get(0).value();
-						underPlayer.setType(s.getMaterial());
-						underPlayer.setBlockData(s.getData(), true);
-						underPlayer.removeMetadata(METADATA_KEY_PREVIOUS, Main.getPlugin());
+					if (underPlayer.hasMetadata(METADATA_KEY)) {
+						state.update(true);
+						underPlayer.removeMetadata(METADATA_KEY, Main.getPlugin());
 					}
 				}
 			}.runTaskLater(Main.getPlugin(), 20 * 2);
 		}
-	}
-}
-
-class SavedBlock {
-	private Material material;
-	private BlockData data;
-
-	public SavedBlock(Material material, BlockData state) {
-		this.material = material;
-		this.data = state;
-	}
-
-	public Material getMaterial() {
-		return material;
-	}
-
-	public BlockData getData() {
-		return data;
 	}
 }

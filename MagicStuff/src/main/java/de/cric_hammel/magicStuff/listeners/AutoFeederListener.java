@@ -28,10 +28,11 @@ import org.bukkit.util.io.BukkitObjectOutputStream;
 import de.cric_hammel.magicStuff.Main;
 import de.cric_hammel.magicStuff.utilities.FoodItem;
 import de.cric_hammel.magicStuff.utilities.PotionEffectWrapper;
+import net.md_5.bungee.api.ChatColor;
 
 public class AutoFeederListener implements Listener {
 
-	private static final String INVENTORY_TITLE = "�4�k�l_�4�lAuto-feeder�4�k�l_";
+	private static final String INVENTORY_TITLE = ChatColor.translateAlternateColorCodes('&', "&4&k&l_&4&lAuto-feeder&4&k&l_");
 
 	Map<String, String> inventories = Main.getPlugin().getAfInventories();
 
